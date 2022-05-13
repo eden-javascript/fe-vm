@@ -1,13 +1,3 @@
-const money = [
-  { won: 10, num: 0 },
-  { won: 50, num: 1 },
-  { won: 100, num: 5 },
-  { won: 500, num: 5 },
-  { won: 1000, num: 2 },
-  { won: 5000, num: 2 },
-  { won: 10000, num: 1 },
-];
-
 const items = [
   { title: '콜라', price: 500 },
   { title: '사이다', price: 1000 },
@@ -30,5 +20,4 @@ const items = [
   { title: '감자칩', price: 2000 },
   { title: '칸쵸', price: 1000 },
 ];
-
-export { money, items };
+export default items;

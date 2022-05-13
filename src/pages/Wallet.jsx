@@ -1,28 +1,41 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import WalletItem from '../components/WalletItem';
-import { money } from '../store/store';
+import { MoneyContext } from '../context/MoneyProvider';
+import { PriceContext } from '../context/PriceProvider';
 
 export default function Wallet() {
-  const handleClickWon = () => {
-    // Todo : store의 setPrice(won)
+  const { moneyState, decreaseMoney } = useContext(MoneyContext);
+  const { setInputPrice, updatePrice, remainMoney, setRemainMoney } =
+    useContext(PriceContext);
+
+  const handleClickWon = (won, num) => {
+    if (num < 1) {
+      window.alert('돈이 부족합니다.');
+      return;
+    }
+
+    decreaseMoney(won);
+    setInputPrice(won);
+    updatePrice(won);
+    setRemainMoney(remainMoney + won);
   };
 
   return (
     <>
       <ul>
-        {money.map(({ won, num }) => (
+        {moneyState.map(({ won, num }) => (
           <WalletItem
             key={`money-${won}`}
             icon={`${won}원 `}
             won={won}
             num={num}
-            onClick={handleClickWon}
+            onClick={() => handleClickWon(won, num)}
           />
         ))}
       </ul>
       <span>
-        {`${`${money
+        {`${`${moneyState
           .map(({ won, num }) => won * num)
           .reduce((aMoney, bMoney) => aMoney + bMoney)}`
           .split('')
