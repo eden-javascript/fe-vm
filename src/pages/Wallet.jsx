@@ -1,54 +1,28 @@
 import React, { useContext } from 'react';
 
-import WalletItem from '../components/WalletItem';
+import WalletItemList from '../components/WalletItemList';
+import TotalMoney from '../components/TotalMoney';
 import { MoneyContext } from '../context/MoneyProvider';
 import { PriceContext } from '../context/PriceProvider';
 
 export default function Wallet() {
   const { moneyState, decreaseMoney } = useContext(MoneyContext);
-  const { setInputPrice, updatePrice, remainMoney, setRemainMoney } =
-    useContext(PriceContext);
+  const { insertInput } = useContext(PriceContext);
 
-  const handleClickWon = (won, num) => {
+  const handleClickMoney = (currentMoney, num) => {
     if (num < 1) {
       window.alert('돈이 부족합니다.');
       return;
     }
 
-    decreaseMoney(won);
-    setInputPrice(won);
-    updatePrice(won);
-    setRemainMoney(remainMoney + won);
+    decreaseMoney(currentMoney);
+    insertInput({ currentMoney, msg: `${currentMoney}원이 투입되었습니다.` });
   };
 
   return (
     <>
-      <ul>
-        {moneyState.map(({ won, num }) => (
-          <WalletItem
-            key={`money-${won}`}
-            icon={`${won}원 `}
-            won={won}
-            num={num}
-            onClick={() => handleClickWon(won, num)}
-          />
-        ))}
-      </ul>
-      <span>
-        {`${`${moneyState
-          .map(({ won, num }) => won * num)
-          .reduce((aMoney, bMoney) => aMoney + bMoney)}`
-          .split('')
-          .reverse()
-          .map((element, index, array) => {
-            if ((index + 1) % 3 === 0 && index + 1 < array.length) {
-              return `,${element}`;
-            }
-            return element;
-          })
-          .reverse()
-          .join('')}원`}
-      </span>
+      <WalletItemList moneyInfo={moneyState} onClickMoney={handleClickMoney} />
+      <TotalMoney moneyInfo={moneyState} />
     </>
   );
 }
